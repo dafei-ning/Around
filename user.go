@@ -67,7 +67,7 @@ func addUser(user User) bool {
 	}
 
 	termQuery := elastic.NewTermQuery("username", user.Username)
-	queryResult, err = es_client.Search().
+	queryResult, err := es_client.Search().
 		Index(INDEX).
 		Query(termQuery).
 		Pretty(true).
@@ -124,6 +124,7 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 }
 
 // If login is successful, a new token is created.
