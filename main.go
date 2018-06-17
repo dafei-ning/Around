@@ -42,7 +42,7 @@ const (
 	BUCKET_NAME = "powerful-gizmo-206503-bucket"
 	
 	// Needs to update this URL if you deploy it to cloud.
-	ES_URL      = "http://35.233.217.243:9200/"
+	ES_URL      = "http://35.203.156.157:9200/"
 	
 )
 
