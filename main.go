@@ -1,9 +1,9 @@
 package main
 
 import (
-	"cloud.google.com/go/bigtable"
+// 	"cloud.google.com/go/bigtable"
 	"cloud.google.com/go/storage"
-	"context"
+// 	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/auth0/go-jwt-middleware"
@@ -37,12 +37,12 @@ const (
 	DISTANCE = "200km"
 	
 	// Needs to update
-	PROJECT_ID  = "powerful-gizmo-206503"
-	BT_INSTANCE = "around-post"
-	BUCKET_NAME = "powerful-gizmo-206503-bucket"
+// 	PROJECT_ID  = "powerful-gizmo-206503"
+// 	BT_INSTANCE = "around-post"
 	
 	// Needs to update this URL if you deploy it to cloud.
 	ES_URL      = "http://35.203.156.157:9200/"
+	BUCKET_NAME = "powerful-gizmo-206503-bucket"
 	
 )
 
@@ -173,35 +173,35 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 	saveToES(p, id)
 
 	// Save to BigTable.
-	saveToBigTable(p, id)
+// 	saveToBigTable(p, id)
 
 }
 
-func saveToBigTable(p *Post, id string) {
-	ctx := context.Background() // store metadata or environment info
-	// you must update project name here
-	bt_client, err := bigtable.NewClient(ctx, PROJECT_ID, BT_INSTANCE)
-	if err != nil {
-		panic(err)
-		return
-	}
+// func saveToBigTable(p *Post, id string) {
+// 	ctx := context.Background() // store metadata or environment info
+// 	// you must update project name here
+// 	bt_client, err := bigtable.NewClient(ctx, PROJECT_ID, BT_INSTANCE)
+// 	if err != nil {
+// 		panic(err)
+// 		return
+// 	}
 
-	tbl := bt_client.Open("post")
-	mut := bigtable.NewMutation() // one row
-	t := bigtable.Now()           // timestamp
+// 	tbl := bt_client.Open("post")
+// 	mut := bigtable.NewMutation() // one row
+// 	t := bigtable.Now()           // timestamp
 
-	mut.Set("post", "user", t, []byte(p.User)) // cast to byte[]
-	mut.Set("post", "message", t, []byte(p.Message))
-	mut.Set("location", "lat", t, []byte(strconv.FormatFloat(p.Location.Lat, 'f', -1, 64)))
-	mut.Set("location", "lon", t, []byte(strconv.FormatFloat(p.Location.Lon, 'f', -1, 64)))
+// 	mut.Set("post", "user", t, []byte(p.User)) // cast to byte[]
+// 	mut.Set("post", "message", t, []byte(p.Message))
+// 	mut.Set("location", "lat", t, []byte(strconv.FormatFloat(p.Location.Lat, 'f', -1, 64)))
+// 	mut.Set("location", "lon", t, []byte(strconv.FormatFloat(p.Location.Lon, 'f', -1, 64)))
 
-	err = tbl.Apply(ctx, id, mut)
-	if err != nil {
-		panic(err)
-		return
-	}
-	fmt.Printf("Post is saved to BigTable: %s\n", p.Message)
-}
+// 	err = tbl.Apply(ctx, id, mut)
+// 	if err != nil {
+// 		panic(err)
+// 		return
+// 	}
+// 	fmt.Printf("Post is saved to BigTable: %s\n", p.Message)
+// }
 
 func saveToGCS(ctx context.Context, r io.Reader, bucketName, name string) (*storage.ObjectHandle, *storage.ObjectAttrs, error) {
 	client, err := storage.NewClient(ctx)
