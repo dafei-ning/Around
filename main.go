@@ -1,9 +1,9 @@
 package main
 
 import (
-// 	"cloud.google.com/go/bigtable"
+	//"cloud.google.com/go/bigtable"
 	"cloud.google.com/go/storage"
-// 	"context"
+	//"context"
 	"encoding/json"
 	"fmt"
 	"github.com/auth0/go-jwt-middleware"
@@ -35,15 +35,14 @@ const (
 	INDEX    = "around"
 	TYPE     = "post"
 	DISTANCE = "200km"
-	
 	// Needs to update
-// 	PROJECT_ID  = "powerful-gizmo-206503"
-// 	BT_INSTANCE = "around-post"
-	
+
+	//PROJECT_ID  = "powerful-gizmo-206503"
+	//BT_INSTANCE = "around-post"
+
 	// Needs to update this URL if you deploy it to cloud.
 	ES_URL      = "http://35.203.156.157:9200/"
 	BUCKET_NAME = "powerful-gizmo-206503-bucket"
-	
 )
 
 var mySigningKey = []byte("Geralt of Rivia")
@@ -173,7 +172,7 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 	saveToES(p, id)
 
 	// Save to BigTable.
-// 	saveToBigTable(p, id)
+	//saveToBigTable(p, id)
 
 }
 
