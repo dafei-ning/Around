@@ -5,17 +5,6 @@
 Download [link](https://cloud.google.com/sdk/downloads) https://cloud.google.com/sdk/downloads
 
 
-Set a name for your new bucket.
-PROJECT_ID=$(gcloud config list project --format "value(core.project)")
-BUCKET_NAME=${PROJECT_ID}-mlengine
-Check the bucket name that you created.
- 	echo $BUCKET_NAME
-REGION=us-central1
-4 	Create the new bucket:
-gsutil mb -l $REGION gs://$BUCKET_NAME
-Note: Use the same region where you plan on running Cloud ML Engine jobs.
-
-
 ### 2. Build the machine learning model
 
 Or download the sample from the Git repository.
@@ -31,4 +20,32 @@ tensorflow==1.4.1
 terminal/console install 
 ```
 sudo pip install -r requirements.txt
+```
+
+Enable following APIs
+
+* Cloud Machine Learning Engine
+* Compute Engine
+* Dataflow
+
+```
+
+### 4. Set up a cloud storage bucket
+
+Set a name for a new bucket.
+```
+	PROJECT_ID=$(gcloud config list project --format "value(core.project)")
+	BUCKET_NAME=${PROJECT_ID}-mlengine
+```
+Check the bucket name
+```
+ 	echo $BUCKET_NAME
+```
+Set region where it runs Cloud ML Engine jobs.
+```
+	REGION=us-central1
+```
+Create the new bucket:
+```
+	gsutil mb -l $REGION gs://$BUCKET_NAME
 ```
