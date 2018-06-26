@@ -28,7 +28,6 @@ Enable following APIs
 * Compute Engine
 * Dataflow
 
-```
 
 ### 4. Set up a cloud storage bucket
 
@@ -49,3 +48,6 @@ Create the new bucket:
 ```
 	gsutil mb -l $REGION gs://$BUCKET_NAME
 ```
+
+### 5. Train the model
+
