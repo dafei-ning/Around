@@ -14,6 +14,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"path/filepath"
 	"reflect"
 	"strconv"
 )
@@ -37,14 +38,23 @@ const (
 	INDEX    = "around"
 	TYPE     = "post"
 	DISTANCE = "200km"
+
 	// Needs to update
-
 	//PROJECT_ID  = "powerful-gizmo-206503"
-	//BT_INSTANCE = "around-post"
+	BT_INSTANCE = "around-post"
 
-	// Needs to update this URL if you deploy it to cloud.
-	ES_URL      = "http://35.203.156.157:9200/"
+	// Update the URL referencing GCE
+	ES_URL = "http://35.203.156.157:9200/"
+
+	// Needs to update this URL if deploy it to cloud.
 	BUCKET_NAME = "powerful-gizmo-206503-bucket"
+	API_PREFIX  = "/api/v1"
+
+	// Front-end
+	ENABLE_MEMCACHE = false
+	ENABLE_BIGTABLE = false
+	ENABLE_AUTH     = true
+	REDIS_URL       = "redis-18610.c1.us-central1-2.gce.cloud.redislabs.com:18610"
 )
 
 var mySigningKey = []byte("Geralt of Rivia")
@@ -107,13 +117,17 @@ func main() {
 		SigningMethod: jwt.SigningMethodHS256,
 	})
 
-	r.Handle("/post", jwtMiddleware.Handler(http.HandlerFunc(handlerPost))).Methods("POST")
-	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET")
-	r.Handle("/cluster", jwtMiddleware.Handler(http.HandlerFunc(handlerCluster)))
-	r.Handle("/login", http.HandlerFunc(loginHandler)).Methods("POST")
-	r.Handle("/signup", http.HandlerFunc(signupHandler)).Methods("POST")
+	r.Handle(API_PREFIX+"/post", jwtMiddleware.Handler(http.HandlerFunc(handlerPost)))
+	r.Handle(API_PREFIX+"/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch)))
+	r.Handle(API_PREFIX+"/cluster", jwtMiddleware.Handler(http.HandlerFunc(handlerCluster)))
 
-	http.Handle("/", r)
+	r.Handle(API_PREFIX+"/login", http.HandlerFunc(loginHandler))
+	r.Handle(API_PREFIX+"/signup", http.HandlerFunc(signupHandler))
+
+	// Backend endpoints.
+	http.Handle(API_PREFIX+"/", r)
+	// Frontend endpoints.
+	http.Handle("/", http.FileServer(http.Dir("build")))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
 	// http.HandleFunc("/post", handlerPost)
@@ -133,7 +147,6 @@ func main() {
 
 func handlerPost(w http.ResponseWriter, r *http.Request) {
 
-	// Other codes
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")

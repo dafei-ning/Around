@@ -65,6 +65,7 @@ func annotate(r io.Reader) (float64, error) {
 			},
 		},
 	}
+
 	body, _ := json.Marshal(request)
 	// Construct a http request.
 	req, _ := http.NewRequest("POST", url, strings.NewReader(string(body)))
